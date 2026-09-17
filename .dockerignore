@@ -1,0 +1,21 @@
+# User-owned data, bind mounted at runtime instead of baked in
+list.json
+.env
+.env.example
+
+# Managed from the host, not from inside the container
+manageList.py
+
+# Never copy the host environment or caches
+.venv/
+**/__pycache__/
+*.py[oc]
+
+# Not needed to run the checker
+.git/
+.gitignore
+.python-version
+README.md
+Dockerfile
+.dockerignore
+docker-compose.yml

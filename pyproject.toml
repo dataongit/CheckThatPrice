@@ -1,0 +1,13 @@
+[project]
+name = "pricecheckeremail"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "babel>=2.18.0",
+    "beautifulsoup4>=4.14.3",
+    "python-dotenv>=1.2.3",
+    "requests>=2.34.2",
+    "simple-useragent>=0.1.6",
+]

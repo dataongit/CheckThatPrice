@@ -1,0 +1,16 @@
+services:
+  pricechecker:
+    build: .
+    image: pricecheckeremail
+    # The two files the user owns. list.json is read-write (the checker writes
+    # the new reference price back into it); .env only needs to be read.
+    volumes:
+      - ./list.json:/app/list.json
+      - ./.env:/app/.env:ro
+    environment:
+      # Nightly run time and the timezone it is read in - change to taste.
+      RUN_AT: "00:00"
+      TZ: "Europe/Berlin"
+      # Set to "true" to also check once immediately on container start.
+      RUN_ON_START: "false"
+    restart: unless-stopped
