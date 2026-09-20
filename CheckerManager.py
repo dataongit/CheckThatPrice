@@ -3,6 +3,7 @@ import requests
 import random
 from parsers.jpc_parser import JPC
 from parsers.amazonde_parser import AmazonDE
+from parsers.ebayde_parser import EbayDE
 import json
 import smtplib
 import ssl
@@ -52,15 +53,16 @@ class Manager:
 
 
     def requestProcess(self, data: dict) -> None:
+        reqSession = requests.Session() 
         for product in data["products"]:
             for vendor in product["vendors"]:
                 checker = self._checkers.get(vendor["name"])
                 if checker is None:
                     continue
 
-                randomAgent = sua.get_list(shuffle=True, force_cached=True)
-                headers = {'User-Agent': self.user_agents[randomAgent]}
-                request = requests.get(vendor["url"], headers=headers)
+                randomAgent = sua.get_list(num=45, shuffle=True)[0]
+                headers = {'User-Agent': randomAgent}
+                request = reqSession.get(vendor["url"], headers=headers)
                 price = checker.parseData(request.text)
                 print(price)
                 if vendor["price"] > float(price):

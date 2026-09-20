@@ -12,7 +12,7 @@
         {
           "name": "Amazon DE",
           "url": "https://www.amazon.de/-/en/Random-Access-Memories-Daft-Punk/dp/B0GF9S7L5N",
-          "price": 75.86,
+          "price": 75.79,
           "currency": "USD"
         }
       ]
@@ -23,13 +23,24 @@
         {
           "name": "Amazon DE",
           "url": "https://www.amazon.de/-/en/TPU-Weeknd-Star-Boy-2LP/dp/B01N4AQZKT",
-          "price": 39.99,
+          "price": 39.58,
           "currency": "EUR"
         },
         {
           "name": "JPC",
           "url": "https://www.jpc.de/jpcng/poprock/detail/-/art/the-weeknd-starboy/hnum/5832942",
-          "price": 39.99,
+          "price": 41.99,
+          "currency": "EUR"
+        }
+      ]
+    },
+    {
+      "name": "Panasonic DP-UB154EG-K",
+      "vendors": [
+        {
+          "name": "Amazon DE",
+          "url": "https://www.amazon.de/-/en/Panasonic-DP-UB154EG-K-Ultra-Blu-ray-Player/dp/B07NCRSNMK",
+          "price": 161.16,
           "currency": "EUR"
         }
       ]
