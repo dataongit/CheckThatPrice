@@ -1,5 +1,7 @@
 """Command line editor for list.json - the product/vendor watch list.
 
+Runs with Python's standard library only; no parser dependencies are needed.
+
 Examples:
     python manageList.py list
     python manageList.py add-product "Discovery"
@@ -12,14 +14,13 @@ import argparse
 import json
 import os
 import sys
-from parsers.jpc_parser import JPC
-from parsers.amazonde_parser import AmazonDE
 
 LIST_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "list.json")
 
-# Vendor names the CheckerManager knows how to parse. Anything else is still
-# accepted (so the list can be prepared before the parser exists) but warned about.
-KNOWN_VENDORS = {JPC.name, AmazonDE.name}
+# Keep these names in sync with the checkers registered in CheckerManager.
+# Declare them here so this editor can run without importing any parser code.
+# Other vendors are accepted (for future parsers), but produce a warning.
+KNOWN_VENDORS = {"JPC", "Amazon DE"}
 
 
 def loadList(path: str = LIST_FILE) -> dict:
