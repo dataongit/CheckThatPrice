@@ -3,7 +3,6 @@ import requests
 import random
 from parsers.jpc_parser import JPC
 from parsers.amazonde_parser import AmazonDE
-from parsers.ebayde_parser import EbayDE
 import json
 import smtplib
 import ssl
