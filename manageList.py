@@ -20,7 +20,7 @@ LIST_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "list.json"
 # Keep these names in sync with the checkers registered in CheckerManager.
 # Declare them here so this editor can run without importing any parser code.
 # Other vendors are accepted (for future parsers), but produce a warning.
-KNOWN_VENDORS = {"JPC", "Amazon DE"}
+KNOWN_VENDORS = {"JPC", "Amazon DE", "Ebay DE"}
 
 
 def loadList(path: str = LIST_FILE) -> dict:

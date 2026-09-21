@@ -2,8 +2,6 @@ services:
   pricechecker:
     build: .
     image: pricecheckeremail
-    # The two files the user owns. list.json is read-write (the checker writes
-    # the new reference price back into it); .env only needs to be read.
     volumes:
       - ./list.json:/app/list.json
       - ./.env:/app/.env:ro

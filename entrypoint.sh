@@ -18,7 +18,7 @@ log() {
 
 runOnce() {
     log "running check"
-    if python main.py; then
+    if xvfb-run -a -s "-screen 0 1920x1080x24" uv run main.py; then
         log "check finished"
     else
         log "check failed with status $?"
