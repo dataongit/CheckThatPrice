@@ -1,15 +1,15 @@
 import os
-import requests
-import random
 from parsers.jpc_parser import JPC
 from parsers.amazonde_parser import AmazonDE
+from parsers.ebayde_parser import EbayDE
 import json
 import smtplib
 import ssl
 from email.message import EmailMessage
 from dotenv import load_dotenv
 from babel import numbers
-import simple_useragent as sua
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 
 load_dotenv()
 
@@ -37,41 +37,51 @@ class Manager:
     sender_email = os.environ["SENDER_EMAIL"]
     receiver_email = os.environ["RECEIVER_EMAIL"]
 
-    def __init__(self, jpcChecker: JPC = None, amazonChecker: AmazonDE = None) -> None:
+    def __init__(self, jpcChecker: JPC = None, amazonChecker: AmazonDE = None, ebayChecker : EbayDE = None) -> None:
 
         self._jpcChecker = jpcChecker or JPC()
         self._amazonChecker = amazonChecker or AmazonDE()
-
+        self._ebayChecker = ebayChecker or EbayDE()
         # Registry of vendor name -> parser. Add a new webpage by writing a
         # parser with a `name` attribute and listing it here - no new
         # branching logic needed in requestProcess.
         self._checkers = {
             checker.name: checker
-            for checker in (self._jpcChecker, self._amazonChecker)
+            for checker in (self._jpcChecker, self._amazonChecker, self._ebayChecker)
         }
 
 
     def requestProcess(self, data: dict) -> None:
-        reqSession = requests.Session() 
-        for product in data["products"]:
-            for vendor in product["vendors"]:
-                checker = self._checkers.get(vendor["name"])
-                if checker is None:
-                    continue
+        options = webdriver.ChromeOptions()
+        options.add_argument("--window-size=1920,1080")
+        driver = webdriver.Chrome(options=options)
+        try:
+            for product in data["products"]:
+                for vendor in product["vendors"]:
+                    checker = self._checkers.get(vendor["name"])
+                    if checker is None:
+                        continue
 
-                randomAgent = sua.get_list(num=45, shuffle=True)[0]
-                headers = {'User-Agent': randomAgent}
-                request = reqSession.get(vendor["url"], headers=headers)
-                price = checker.parseData(request.text)
-                print(price)
-                if vendor["price"] > float(price):
-                    self._sendPriceEmail(checker.name, product["name"], price, vendor["url"], vendor["currency"])
-                    self.update_price(checker.name, product["name"], price)
-                elif vendor["price"] < float(price):
-                    self._sendPriceEmail(checker.name, product["name"], price, vendor["url"], vendor["currency"])
-                    self.update_price(checker.name, product["name"], price)
-                elif price == "":
-                    pass
+                    try:
+                        driver.get(vendor["url"])
+                        price = checker.parseData(driver)
+                    except TimeoutException:
+                        print(f"Could not find a price: {vendor['url']}")
+                        continue
+
+                    if float(vendor["price"]) != float(price):
+                        self._sendPriceEmail(
+                        checker.name,
+                        product["name"],
+                        price,
+                        vendor["url"],
+                        vendor["currency"],
+                        )
+                        self.update_price(
+                        checker.name, product["name"], price
+                        )
+        finally:
+            driver.quit()
 
     def _sendPriceEmail(self, vendor_name: str, product_name: str, price: str, url: str, currency: str) -> None:
         msg = EmailMessage()

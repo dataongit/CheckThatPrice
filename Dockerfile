@@ -8,7 +8,7 @@ ENV UV_COMPILE_BYTECODE=1 \
 
 # tzdata so TZ / RUN_AT are interpreted in the user's local time.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends tzdata \
+    && apt-get install -y --no-install-recommends tzdata chromium chromium-driver xvfb xauth \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

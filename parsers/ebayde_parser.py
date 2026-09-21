@@ -4,13 +4,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-class JPC:
-    name = "JPC"
+class EbayDE:
+    name = "Ebay DE"
 
     def parseData(self, driver: WebDriver) -> str:
-        element = WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, '.price meta[itemprop="price"]')
+        price = WebDriverWait(driver, 25).until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, ".x-price-primary__price .ux-textspans")
             )
-        )
-        return element.get_attribute("content").strip()
+        ).text
+
+        return price.replace(",",".").replace("EUR", "")
